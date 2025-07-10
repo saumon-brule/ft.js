@@ -1,0 +1,54 @@
+{
+  "name": "ft-js",
+  "version": "0.0.1",
+  "description": "Aims to provide a usefull and easy way to use the 42 school's API.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "watch": "tsc --watch",
+    "check": "tsc && eslint . --config ./eslint.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "exports": {
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
+    },
+    "import": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saumon-brule/ft-js.git"
+  },
+  "keywords": [
+    "42",
+    "api",
+    "wrapper",
+    "javascript",
+    "js",
+    "typescript",
+    "ts"
+  ],
+  "author": "saumon-brule",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/saumon-brule/ft-js/issues"
+  },
+  "homepage": "https://github.com/saumon-brule/ft-js#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.30.1",
+    "@types/node": "^24.0.12",
+    "@typescript-eslint/parser": "^8.36.0",
+    "dotenv": "^17.2.0",
+    "eslint": "^9.30.1",
+    "globals": "^16.3.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.36.0"
+  }
+}

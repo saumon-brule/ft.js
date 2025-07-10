@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "node",
+		"baseUrl": "./",
+		"paths": {
+			"~/*": ["./src/*"]
+		},
+		"strict": true,
+		"noEmit": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"esModuleInterop": true,
+		"types": ["node"]
+	},
+	"include": ["src", "eslint.config.js"],
+	"exclude": ["node_modules", "dist"],
+}
