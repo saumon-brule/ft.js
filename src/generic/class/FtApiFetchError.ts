@@ -1,6 +1,6 @@
 import { FtApiErrors, FtApiStatus } from "~/constants/FtApiErrors";
 
-export default class FtApiFetchError extends Error {
+export class FtApiFetchError extends Error {
 	status: FtApiStatus;
 
 	constructor(status: FtApiStatus) {

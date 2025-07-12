@@ -1,6 +1,14 @@
-import FtApiFetchError from "~/generic/class/FtApiFetchError";
-import checkStatus from "~/typeguards/checkStatus";
-import AppTokenReponse from "~/structures/AppTokenReponse";
+import { FtApiFetchError } from "~/generic/class/FtApiFetchError";
+import { checkStatus } from "~/typeguards/checkStatus";
+
+type AppTokenReponse = {
+	access_token: string,
+	token_type: string,
+	expires_in: number,
+	scope: string,
+	created_at: number,
+	secret_valid_until: number
+}
 
 function checkData(data: unknown): data is AppTokenReponse {
 	return typeof data === "object" && data !== null
@@ -18,7 +26,7 @@ export async function getAppToken(uid: string, secret: string): Promise<AppToken
 	body.append("client_id", uid);
 	body.append("client_secret", secret);
 
-	const options:RequestInit = {
+	const options: RequestInit = {
 		method: "POST",
 		body
 	};

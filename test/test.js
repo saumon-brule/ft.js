@@ -7,6 +7,13 @@ process.on("uncaughtException", ({ message }) => {
 
 import { FtApp } from "../dist/index.js";
 
-const App = new FtApp({ uid: process.env.APP_UID, secret: process.env.APP_SECRET });
+const App = new FtApp([
+	{ uid: process.env.APP_UID, secret: process.env.APP_SECRET },
+	{ uid: process.env.APP_UID2, secret: process.env.APP_SECRET2 },
+]);
 
 console.log(App);
+
+await App.login();
+
+

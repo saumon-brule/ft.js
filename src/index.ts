@@ -1,1 +1,1 @@
-export { FtApp } from "./App/App.js";
+export { FtApp } from "./app/App.js";

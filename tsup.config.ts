@@ -10,7 +10,6 @@ export default defineConfig({
 	splitting: false,
 
 	sourcemap: true,
-	minify: "terser",
 	clean: true,
 	dts: true
 });
