@@ -1,21 +1,21 @@
-import { getAppToken } from "~/api/oauth/token";
-import { AppCredentials } from "~/structures/AppCredentials";
+import { fetchAppToken } from "~/api/oauth/token";
+import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
 
 type TokenState = "pending" | "valid" | "invalid"
 
-export class AppToken {
-	private appCredentials: AppCredentials;
+export class AppCredential {
+	appConfig: OAuth2ClientConfig;
 	private tokenValue: string | null = null;
 	private state: TokenState = "invalid";
 
-	constructor(appCredentials: AppCredentials) {
-		this.appCredentials = { ...appCredentials };
+	constructor(appConfig: OAuth2ClientConfig) {
+		this.appConfig = { ...appConfig };
 	}
 
 	async refresh(): Promise<void> {
 		this.state = "pending";
 		try {
-			const appTokenResponse = await getAppToken(this.appCredentials.uid, this.appCredentials.secret);
+			const appTokenResponse = await fetchAppToken(this.appConfig.uid, this.appConfig.secret);
 			this.tokenValue = appTokenResponse.access_token;
 			this.state = "valid";
 		} catch (error) {

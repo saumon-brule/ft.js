@@ -1,22 +1,23 @@
 import { BaseClient } from "~/client/BaseClient";
-import { AppTokenManager } from "./TokenManager/AppTokenManager";
-import { AppCredentials } from "~/structures/AppCredentials";
-
-
+import { AppCredentialsManager } from "./TokenManager/AppCredentialsManager";
+import { UserManager } from "./UserManager/UserManager";
+import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
 
 export class FtApp extends BaseClient {
-	tokenHandler: AppTokenManager;
+	credentialsManager: AppCredentialsManager;
+	userManager: UserManager;
 
-	constructor(AppCredentialsList: AppCredentials[], ) {
+	constructor(configs: OAuth2ClientConfig[],) {
 		super();
-		this.tokenHandler = new AppTokenManager(AppCredentialsList);
+		this.credentialsManager = new AppCredentialsManager(configs);
+		this.userManager = new UserManager(this);
 	}
 
 	get token() {
-		return this.tokenHandler.token;
+		return this.credentialsManager.token;
 	}
 
-	async login(): Promise<void> {
-		return this.tokenHandler.init()
+	async login() {
+		return this.credentialsManager.init();
 	}
 }
