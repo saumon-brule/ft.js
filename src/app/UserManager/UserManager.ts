@@ -1,8 +1,8 @@
 import { User } from "~/user/User";
 import { OAuth2Server, OAuth2ServerOptions } from "~/server/OAuth2Server";
-import { AppCredentialsManager } from "../TokenManager/AppCredentialsManager";
-import { TokenReponse } from "~/api/oauth/token";
+import { UserTokenData } from "~/api/oauth/token";
 import { FtApp } from "../App";
+import { AppCredential } from "../TokenManager/AppCredential";
 
 export class UserManager {
 	users: User[] = [];
@@ -11,10 +11,11 @@ export class UserManager {
 
 	constructor(ftApp: FtApp) {
 		this.ftApp = ftApp;
-		this.server = new OAuth2Server(ftApp.credentialsManager);
+		this.server = new OAuth2Server(ftApp, this);
 	}
 
-	registerUser(userTokenData: TokenReponse) {
+	registerUser(userTokenData: UserTokenData, appCredential: AppCredential) {
+		const user = new User(this.ftApp, userTokenData, appCredential);
 		console.log(userTokenData.access_token);
 		console.log(userTokenData.created_at);
 		console.log(userTokenData.expires_in);

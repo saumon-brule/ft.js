@@ -1,7 +1,7 @@
 import { Express } from "express";
-import { fetchUserToken } from "~/api/oauth/token";
+import { fetchUserToken, UserTokenData } from "~/api/oauth/token";
 import { AppCredentialsManager } from "~/app/TokenManager/AppCredentialsManager";
-import { TokenReponse } from "~/api/oauth/token";
+import { AppTokenData } from "~/api/oauth/token";
 import { AppCredential } from "~/app/TokenManager/AppCredential";
 
 const INTRA_OAUTH_URL = "https://api.intra.42.fr/oauth/authorize";
@@ -30,7 +30,7 @@ export function setupCallbackRoute(
 		successPage: string,
 		errorPage: string
 	},
-	registerNewUser: (userTokenData: TokenReponse, appCredentials: AppCredential) => void
+	registerNewUser: (userTokenData: UserTokenData, appCredentials: AppCredential) => void
 ) {
 	app.get(callbackRoute, async (req, res) => {
 		const code = typeof req.query.code === 'string' ? req.query.code : undefined;
