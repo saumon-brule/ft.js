@@ -1,8 +1,9 @@
 import tsParser from "@typescript-eslint/parser";
 import globals from "globals";
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
+	globalIgnores([".local/**/*"]),
 	{
 		files: ["**/*.ts"],
 		languageOptions: {

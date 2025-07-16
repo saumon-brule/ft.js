@@ -5,6 +5,7 @@ import { setupCallbackRoute, setupLoginRoute } from "./setupRoutes";
 import { createRequire } from "module";
 import { FtApp } from "~/app/App";
 import { UserManager } from "~/app/UserManager/UserManager";
+import { appendFile } from "fs";
 
 export type OAuth2ServerOptions = {
 	hostname: string,
@@ -17,11 +18,10 @@ export type OAuth2ServerOptions = {
 
 async function importExpress(): Promise<() => Express> {
 	try {
-		const require = createRequire(import.meta.url)
-		const express = require("express")
+		const require = createRequire(import.meta.url);
+		const express = require("express");
 		return express;
-	} catch (a) {
-		console.error(a);
+	} catch (_) {
 		throw new Error("Couldn't import 'express' module. Please run 'npm install express' if you want to use oauth2 server features");
 	}
 }
@@ -54,11 +54,10 @@ export class OAuth2Server {
 			this.expressApp,
 			this.credentialsManager,
 			{ callbackRoute, successPage, errorPage },
-			this.userManager.registerUser
+			this.userManager.registerUser.bind(this.userManager)
 		);
 		this.server = this.expressApp.listen(port, hostname, () => {
-			console.log("server ON");
+			this.ftApp.events.emit("serverOn", this);
 		});
 	}
-
 }

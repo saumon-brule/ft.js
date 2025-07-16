@@ -1,10 +1,10 @@
-import { FtApiErrors, FtApiStatus } from "~/constants/FtApiErrors";
+import { FtApiErrorMessages, FtApiStatus } from "~/constants/FtApiErrors";
 
 export class FtApiFetchError extends Error {
 	status: FtApiStatus;
 
 	constructor(status: FtApiStatus) {
-		super(`Error: ${FtApiErrors[status]}`);
+		super(FtApiErrorMessages[status]);
 		this.status = status;
 	}
 }

@@ -1,6 +1,10 @@
+import { resolvePtr } from "node:dns/promises";
+import { API_BASE } from "~/constants/FtApiBase";
 import { FtApiFetchError } from "~/generic/class/FtApiFetchError";
 import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
 import { checkStatus } from "~/typeguards/checkStatus";
+
+const ROUTE = "/oauth/token";
 
 export type AppTokenData = {
 	access_token: string,
@@ -33,14 +37,14 @@ export async function fetchAppToken(uid: string, secret: string) {
 		body
 	};
 
-	return fetch("https://api.intra.42.fr/oauth/token", options)
+	return fetch(`${API_BASE}${ROUTE}`, options)
 		.then(async (response) => {
 			if (response.ok) {
 				const data: unknown = await response.json();
 				if (appTokenResponseGuard(data)) {
 					return data as AppTokenData;
 				}
-				throw new Error("Unexpected response data");
+				throw new Error(ROUTE);
 			}
 			if (checkStatus(response.status)) {
 				throw new FtApiFetchError(response.status);
@@ -82,16 +86,16 @@ export async function fetchUserToken(code: string, config: OAuth2ClientConfig) {
 
 	const options: RequestInit = {
 		method: "POST",
-		body,
-	}
+		body
+	};
 
-	return fetch("https://api.intra.42.fr/oauth/token", options).then(async (response) => {
+	return fetch(`${API_BASE}${ROUTE}`, options).then(async (response) => {
 		if (response.ok) {
 			const data: unknown = await response.json();
 			if (userTokenResponseGuard(data)) {
 				return data as UserTokenData;
 			}
-			throw new Error("Unexpected response data");
+			throw new Error(ROUTE);
 		}
 		if (checkStatus(response.status)) {
 			throw new FtApiFetchError(response.status);
@@ -109,16 +113,16 @@ export async function fetchRefreshUserToken(refreshToken: string, config: OAuth2
 
 	const options: RequestInit = {
 		method: "POST",
-		body,
-	}
+		body
+	};
 
-	return fetch("https://api.intra.42.fr/oauth/token", options).then(async (response) => {
+	return fetch(`${API_BASE}${ROUTE}`, options).then(async (response) => {
 		if (response.ok) {
 			const data: unknown = await response.json();
 			if (userTokenResponseGuard(data)) {
 				return data as UserTokenData;
 			}
-			throw new Error("Unexpected response data");
+			throw new Error(ROUTE);
 		}
 		if (checkStatus(response.status)) {
 			throw new FtApiFetchError(response.status);

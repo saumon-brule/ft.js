@@ -14,7 +14,7 @@ export function setupLoginRoute(app: Express, credentialManager: AppCredentialsM
 		params.append("redirect_uri", userConfig.redirectURI);
 		params.append("response_type", "code");
 		params.append("state", userConfig.uid);
-		res.redirect(`${INTRA_OAUTH_URL}?${params.toString()}`)
+		res.redirect(`${INTRA_OAUTH_URL}?${params.toString()}`);
 	});
 }
 
@@ -33,10 +33,10 @@ export function setupCallbackRoute(
 	registerNewUser: (userTokenData: UserTokenData, appCredentials: AppCredential) => void
 ) {
 	app.get(callbackRoute, async (req, res) => {
-		const code = typeof req.query.code === 'string' ? req.query.code : undefined;
+		const code = typeof req.query.code === "string" ? req.query.code : undefined;
 		const state = req.query.state;
 		if (!code || !state) return res.status(400).sendFile(errorPage);
-		
+
 		const appCredential = credentialManager.appCredentials.find((appCredential) => appCredential.appConfig.uid === state);
 		if (appCredential === undefined) return res.status(400).sendFile(errorPage);
 		try {

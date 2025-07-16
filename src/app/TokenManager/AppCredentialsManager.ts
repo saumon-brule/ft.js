@@ -23,7 +23,7 @@ export class AppCredentialsManager {
 	}
 
 	shift(offset?: number) {
-	this.activeAppTokenIndex = (this.activeAppTokenIndex + (offset ?? 1)) % this.appCredentials.length;
+		this.activeAppTokenIndex = (this.activeAppTokenIndex + (offset ?? 1)) % this.appCredentials.length;
 	}
 
 	active(): string | null {
@@ -31,7 +31,7 @@ export class AppCredentialsManager {
 	}
 
 	get config() {
-		const credentials = this.appCredentials[this.activeAppTokenIndex].appConfig
+		const credentials = this.appCredentials[this.activeAppTokenIndex].appConfig;
 		this.shift();
 		return credentials;
 	}
