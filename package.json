@@ -1,8 +1,11 @@
 {
-  "name": "ft-js",
+  "name": "@saumon-brule/ft.js",
   "version": "0.0.1",
   "description": "Aims to provide a usefull and easy way to use the 42 school's API.",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -23,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/saumon-brule/ft-js.git"
+    "url": "git+https://github.com/saumon-brule/ft.js.git"
   },
   "keywords": [
     "42",
@@ -37,9 +40,9 @@
   "author": "saumon-brule",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/saumon-brule/ft-js/issues"
+    "url": "https://github.com/saumon-brule/ft.js/issues"
   },
-  "homepage": "https://github.com/saumon-brule/ft-js#readme",
+  "homepage": "https://github.com/saumon-brule/ft.js#readme",
   "devDependencies": {
     "@eslint/js": "^9.30.1",
     "@types/express": "^5.0.3",
