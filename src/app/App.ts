@@ -6,6 +6,24 @@ import { FtEvent } from "~/structures/Events";
 import { OAuth2ServerOptions } from "./server/OAuth2Server";
 import { AppHttpClient } from "./client/AppHttpClient";
 
+export type UsedOAuth2ServerOptions = {
+	hostname?: string,
+	port?: number,
+	loginRoute?: string,
+	callbackRoute?: string,
+	successPage?: string | null,
+	errorPage?: string | null
+}
+
+const DEFAULT_OAUTH2_SERVER_OPTIONS: OAuth2ServerOptions = {
+	hostname: "localhost",
+	port: 3042,
+	loginRoute: "/",
+	callbackRoute: "/callback",
+	successPage: null,
+	errorPage: null
+};
+
 export class FtApp {
 	credentialsManager: AppCredentialsManager;
 	userManager: UserManager;
@@ -27,14 +45,10 @@ export class FtApp {
 		return this.credentialsManager.token;
 	}
 
-	startAuthServer(options: OAuth2ServerOptions = {
-		hostname: "localhost",
-		port: 3042,
-		loginRoute: "/",
-		callbackRoute: "/callback",
-		successPage: "/home/saumon/dev/perso/ft-js/web/success.html",
-		errorPage: "/home/saumon/dev/perso/ft-js/web/error.html"
-	}) {
-		this.userManager.server.start(options);
+	startAuthServer(options: UsedOAuth2ServerOptions) {
+		this.userManager.server.start({
+			...DEFAULT_OAUTH2_SERVER_OPTIONS,
+			...options
+		});
 	}
 }

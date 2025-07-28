@@ -21,31 +21,37 @@ export function setupLoginRoute(app: Express, credentialManager: AppCredentialsM
 export function setupCallbackRoute(
 	app: Express,
 	credentialManager: AppCredentialsManager,
-	{
-		callbackRoute,
-		successPage,
-		errorPage
-	}: {
-		callbackRoute: string,
-		successPage: string,
-		errorPage: string
-	},
+	callbackRoute: string,
+	successPage: string | null,
+	errorPage: string | null,
 	registerNewUser: (userTokenData: UserTokenData, appCredentials: AppCredential) => void
 ) {
 	app.get(callbackRoute, async (req, res) => {
 		const code = typeof req.query.code === "string" ? req.query.code : undefined;
 		const state = req.query.state;
-		if (!code || !state) return res.status(400).sendFile(errorPage);
+		if (!code || !state) {
+			if (errorPage)
+				return res.redirect(errorPage);
+			return res.status(400).type("text/plain").send("Authentification Error");
+		}
 
 		const appCredential = credentialManager.appCredentials.find((appCredential) => appCredential.appConfig.uid === state);
-		if (appCredential === undefined) return res.status(400).sendFile(errorPage);
+		if (appCredential === undefined) {
+			if (errorPage)
+				return res.redirect(errorPage);
+			return res.status(400).type("text/plain").send("Authentification Error");
+		}
+
 		try {
 			const tokenData = await fetchUserToken(code, appCredential.appConfig);
 			registerNewUser(tokenData, appCredential);
-			return res.status(200).sendFile(successPage);
+			if (successPage)
+				return res.redirect(successPage);
+			return res.status(200).type("text/plain").send("Authentification Success");
 		} catch (error: any) {
-			console.error(error);
-			return res.status(error?.status ?? 400).sendFile(errorPage);
+			if (errorPage)
+				return res.redirect(errorPage);
+			return res.status(500).type("text/plain").send("Authentification Server Error");
 		}
 	});
 }

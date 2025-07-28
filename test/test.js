@@ -14,10 +14,12 @@ await App.login();
 
 global.app = App;
 
+App.httpClient.get("/v2/campus?per_page=100")
+	.then(response => response.json())
+	.then(console.log);
+
 App.events.on("userAdd", (user) => {
-	console.log(user.userToken.createdAt);
-	console.log(user.userToken.expiresIn);
-	console.log(user.userToken.expiresAt);
+	user.load().then(console.log);
 });
 
 App.events.on("serverOn", (server) => {

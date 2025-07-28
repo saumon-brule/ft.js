@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const meSchema = z.object({
-	id: z.null(),
+	id: z.number().nullable(),
 	email: z.string(),
 	login: z.string(),
 	first_name: z.string(),

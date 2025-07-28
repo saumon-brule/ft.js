@@ -12,8 +12,8 @@ export type OAuth2ServerOptions = {
 	port: number,
 	loginRoute: string,
 	callbackRoute: string,
-	successPage: string,
-	errorPage: string
+	successPage: string | null,
+	errorPage: string | null
 }
 
 async function importExpress(): Promise<() => Express> {
@@ -39,21 +39,16 @@ export class OAuth2Server {
 		this.credentialsManager = ftApp.credentialsManager;
 	}
 
-	async start({
-		hostname,
-		port,
-		loginRoute,
-		callbackRoute,
-		successPage,
-		errorPage
-	}: OAuth2ServerOptions) {
+	async start({ hostname, port, loginRoute, callbackRoute, successPage, errorPage }: OAuth2ServerOptions) {
 		const express = await importExpress();
 		this.expressApp = express();
 		setupLoginRoute(this.expressApp, this.credentialsManager, loginRoute);
 		setupCallbackRoute(
 			this.expressApp,
 			this.credentialsManager,
-			{ callbackRoute, successPage, errorPage },
+			callbackRoute,
+			successPage,
+			errorPage,
 			this.userManager.registerUser.bind(this.userManager)
 		);
 		this.server = this.expressApp.listen(port, hostname, () => {
