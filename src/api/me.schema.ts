@@ -94,90 +94,26 @@ export const meSchema = z.object({
 			})
 		})
 	),
-	projects_users: z.array(
-		z.union([
-			z.object({
-				id: z.number(),
-				occurrence: z.number(),
-				final_mark: z.number(),
-				status: z.string(),
-				"validated?": z.boolean(),
-				current_team_id: z.number(),
-				project: z.object({
-					id: z.number(),
-					name: z.string(),
-					slug: z.string(),
-					parent_id: z.null()
-				}),
-				cursus_ids: z.array(z.number()),
-				marked_at: z.string(),
-				marked: z.boolean(),
-				retriable_at: z.string(),
-				created_at: z.string(),
-				updated_at: z.string()
-			}),
-			z.object({
-				id: z.number(),
-				occurrence: z.number(),
-				final_mark: z.null(),
-				status: z.string(),
-				"validated?": z.null(),
-				current_team_id: z.number(),
-				project: z.object({
-					id: z.number(),
-					name: z.string(),
-					slug: z.string(),
-					parent_id: z.null()
-				}),
-				cursus_ids: z.array(z.number()),
-				marked_at: z.null(),
-				marked: z.boolean(),
-				retriable_at: z.null(),
-				created_at: z.string(),
-				updated_at: z.string()
-			}),
-			z.object({
-				id: z.number(),
-				occurrence: z.number(),
-				final_mark: z.number(),
-				status: z.string(),
-				"validated?": z.boolean(),
-				current_team_id: z.number(),
-				project: z.object({
-					id: z.number(),
-					name: z.string(),
-					slug: z.string(),
-					parent_id: z.null()
-				}),
-				cursus_ids: z.array(z.number()),
-				marked_at: z.string(),
-				marked: z.boolean(),
-				retriable_at: z.null(),
-				created_at: z.string(),
-				updated_at: z.string()
-			}),
-			z.object({
-				id: z.number(),
-				occurrence: z.number(),
-				final_mark: z.number(),
-				status: z.string(),
-				"validated?": z.boolean(),
-				current_team_id: z.number(),
-				project: z.object({
-					id: z.number(),
-					name: z.string(),
-					slug: z.string(),
-					parent_id: z.number()
-				}),
-				cursus_ids: z.array(z.number()),
-				marked_at: z.string(),
-				marked: z.boolean(),
-				retriable_at: z.string(),
-				created_at: z.string(),
-				updated_at: z.string()
-			})
-		])
-	),
+	projects_users: z.array(z.object({
+		id: z.number(),
+		occurrence: z.number(),
+		final_mark: z.number().nullable(),
+		status: z.string(),
+		"validated?": z.boolean().nullable(),
+		current_team_id: z.number().nullable(),
+		project: z.object({
+			id: z.number(),
+			name: z.string(),
+			slug: z.string(),
+			parent_id: z.number().nullable()
+		}),
+		cursus_ids: z.array(z.number()),
+		marked_at: z.string(),
+		marked: z.boolean(),
+		retriable_at: z.string().nullable(),
+		created_at: z.string(),
+		updated_at: z.string()
+	})),
 	languages_users: z.array(
 		z.object({
 			id: z.number(),
@@ -188,30 +124,17 @@ export const meSchema = z.object({
 		})
 	),
 	achievements: z.array(
-		z.union([
-			z.object({
-				id: z.number(),
-				name: z.string(),
-				description: z.string(),
-				tier: z.string(),
-				kind: z.string(),
-				visible: z.boolean(),
-				image: z.string(),
-				nbr_of_success: z.null(),
-				users_url: z.string()
-			}),
-			z.object({
-				id: z.number(),
-				name: z.string(),
-				description: z.string(),
-				tier: z.string(),
-				kind: z.string(),
-				visible: z.boolean(),
-				image: z.string(),
-				nbr_of_success: z.number(),
-				users_url: z.string()
-			})
-		])
+		z.object({
+			id: z.number(),
+			name: z.string(),
+			description: z.string(),
+			tier: z.string(),
+			kind: z.string(),
+			visible: z.boolean(),
+			image: z.string(),
+			nbr_of_success: z.number().nullable(),
+			users_url: z.string()
+		})
 	),
 	titles: z.array(z.object({ id: z.number(), name: z.string() })),
 	titles_users: z.array(
