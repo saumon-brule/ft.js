@@ -4,6 +4,7 @@ import { FtApp } from "../App";
 import { AppCredential } from "../TokenManager/AppCredential";
 import { sendRawResponse, redirectResponse } from "../server/serverResponsesHandler";
 import { IncomingMessage, ServerResponse } from "node:http";
+import { AuthenticatedRequest } from "~/structures/AuthenticatedRequest";
 
 const INTRA_OAUTH_URL = "https://api.intra.42.fr/oauth/authorize";
 
@@ -15,10 +16,12 @@ export class UserManager {
 		this.ftApp = ftApp;
 	}
 
-	registerUser(userTokenData: UserTokenData, appCredential: AppCredential) {
+	async registerUser(userTokenData: UserTokenData, appCredential: AppCredential) {
 		const user = new User(this.ftApp, userTokenData, appCredential);
+		await user.load();
 		this.users.push(user);
 		this.ftApp.events.emit("userAdd", user);
+		return user;
 	}
 
 	authenticate() {
@@ -62,7 +65,7 @@ export class UserManager {
 
 			try {
 				const tokenData = await fetchUserToken(code, appCredential.appConfig);
-				this.registerUser(tokenData, appCredential);
+				(req as AuthenticatedRequest).user = await this.registerUser(tokenData, appCredential);
 
 				if (isExpress) return next();
 				if (successPage) {

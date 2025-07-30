@@ -4,8 +4,10 @@ import { AppCredential } from "~/app/TokenManager/AppCredential";
 import { UserToken } from "./UserToken";
 import { UserHttpClient } from "~/app/client/UserHttpClient";
 import { fetchMe } from "~/api/me";
+import { error } from "node:console";
 
 export class User {
+	id: number | null = null;
 	ftApp: FtApp;
 	userToken: UserToken;
 	httpClient: UserHttpClient;
@@ -17,6 +19,8 @@ export class User {
 	}
 
 	async load() {
-		return fetchMe(this);
+		const data = await fetchMe(this);
+		if (!data.id) throw new Error("No User id after fetch");
+		this.id = data.id;
 	}
 }
