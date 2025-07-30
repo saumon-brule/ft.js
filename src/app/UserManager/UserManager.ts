@@ -38,33 +38,44 @@ export class UserManager {
 	}
 
 	callback({ successPage, errorPage }: { successPage?: string, errorPage?: string } = {}) {
-		return async (req: IncomingMessage, res: ServerResponse) => {
+		return async (req: IncomingMessage, res: ServerResponse, next?: any) => {
+			const isExpress = typeof next === "function";
+
 			const url = new URL(req.url ?? "", "http://localhost:3042");
+
 			const code = url.searchParams.get("code");
 			const state = url.searchParams.get("state");
 			if (!code || !state) {
-				if (errorPage)
+				if (errorPage) {
 					return redirectResponse(res, errorPage);
+				}
 				return sendRawResponse(res, 400, "Authentification Error");
 			}
 
 			const appCredential = this.ftApp.credentialsManager.appCredentials.find((appCredential) => appCredential.appConfig.uid === state);
 			if (appCredential === undefined) {
-				if (errorPage)
+				if (errorPage) {
 					return redirectResponse(res, errorPage);
+				}
 				return sendRawResponse(res, 400, "Authentification Error");
 			}
 
 			try {
 				const tokenData = await fetchUserToken(code, appCredential.appConfig);
 				this.registerUser(tokenData, appCredential);
-				if (successPage)
+
+				if (isExpress) return next();
+				if (successPage) {
 					return redirectResponse(res, successPage);
+				}
 				return sendRawResponse(res, 200, "Authentification Success");
 			} catch (error: any) {
-				if (errorPage)
-					return redirectResponse(res, errorPage);
-				return sendRawResponse(res, 500, "Server Error");
+				if (errorPage) {
+					redirectResponse(res, errorPage);
+				} else {
+					sendRawResponse(res, 500, "Server Error");
+				}
+				throw error;
 			}
 		};
 	}
