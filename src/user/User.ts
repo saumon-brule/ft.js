@@ -4,7 +4,6 @@ import { AppCredential } from "~/app/TokenManager/AppCredential";
 import { UserToken } from "./UserToken";
 import { UserHttpClient } from "~/app/client/UserHttpClient";
 import { fetchMe } from "~/api/me";
-import { error } from "node:console";
 
 export class User {
 	id: number | null = null;

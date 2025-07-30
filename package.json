@@ -1,6 +1,6 @@
 {
   "name": "@saumon-brule/ft.js",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Aims to provide a usefull and easy way to use the 42 school's API.",
   "type": "module",
   "files": [
