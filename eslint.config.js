@@ -24,7 +24,7 @@ export default defineConfig([
 			"no-trailing-spaces": "error",
 			"eol-last": ["error", "always"],
 			"quotes": ["error", "double"],
-			"brace-style": ["error", "1tbs"],
+			"brace-style": ["error", "1tbs", { "allowSingleLine": true }],
 			"comma-dangle": ["error", "never"],
 			"object-curly-spacing": ["error", "always"],
 			"comma-spacing": ["error", { before: false, after: true }],
