@@ -11,10 +11,10 @@ export class UserHttpClient extends FtHttpClient {
 	}
 
 	protected async createFetchInit(method: Method, options: RequestInit): Promise<RequestInit> {
-		await this.user.userToken.ensureValidity();
+		const userToken = await this.user.credentials.getAccessToken();
 		const headers = new Headers();
 		if (!headers.has("Authorization")) {
-			headers.append("Authorization", `Bearer ${this.user.userToken.token}`);
+			headers.append("Authorization", `Bearer ${userToken}`);
 		}
 		return {
 			...options,

@@ -1,37 +1,32 @@
 import { AppCredential } from "./AppCredential";
 import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
 
+/*
+missing :
+in the method `token` it would be great if a token isn't available, to get another one while its being fetched
+a way to refresh every possible token
+
+*/
 export class AppCredentialsManager {
-	appCredentials: AppCredential[] = [];
+	appCredentials: AppCredential[];
 	private activeAppTokenIndex: number = 0;
 
 	constructor(configs: OAuth2ClientConfig[]) {
-		configs.forEach((config) => {
-			this.appCredentials.push(new AppCredential(config));
+		this.appCredentials = configs.map((config) => {
+			return new AppCredential(config);
 		});
 	}
 
-	async init() {
-		if (this.appCredentials.length === 0) {
-			throw new Error("No App credentials found");
-		}
-		const promises: Promise<void>[] = [];
-		this.appCredentials.forEach((token) => {
-			promises.push(token.refresh());
-		});
-		await Promise.all(promises);
+	private shift(offset: number = 1) {
+		this.activeAppTokenIndex = (this.activeAppTokenIndex + offset) % this.appCredentials.length;
 	}
 
-	shift(offset?: number) {
-		this.activeAppTokenIndex = (this.activeAppTokenIndex + (offset ?? 1)) % this.appCredentials.length;
-	}
-
-	active(): string | null {
+	activeToken(): string | null {
 		return this.appCredentials[this.activeAppTokenIndex].token;
 	}
 
 	get config() {
-		const credentials = this.appCredentials[this.activeAppTokenIndex].appConfig;
+		const credentials = this.appCredentials[this.activeAppTokenIndex].oauthConfig;
 		this.shift();
 		return credentials;
 	}
@@ -39,7 +34,7 @@ export class AppCredentialsManager {
 	get token() {
 		const startIndex = this.activeAppTokenIndex;
 		do {
-			const token = this.active();
+			const token = this.activeToken();
 			this.shift();
 			if (token)
 				return token;

@@ -26,12 +26,4 @@ export class FtApp {
 		this.httpClient = new AppHttpClient(this);
 		this.events = new EventEmitter<FtEvent>();
 	}
-
-	async login() {
-		return this.credentialsManager.init();
-	}
-
-	get token() {
-		return this.credentialsManager.token;
-	}
 }

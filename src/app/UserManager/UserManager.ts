@@ -1,11 +1,11 @@
 import { User } from "~/user/User";
 import { fetchUserToken } from "~/api/oauth/token";
 import { FtApp } from "../App";
-import { AppCredential } from "../TokenManager/AppCredential";
 import { sendRawResponse, redirectResponse } from "../server/serverResponsesHandler";
 import { IncomingMessage, ServerResponse } from "node:http";
 import { AuthenticatedRequest } from "~/structures/AuthenticatedRequest";
 import { UserTokenData } from "~/structures/FtTokenData";
+import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
 
 const INTRA_OAUTH_URL = "https://api.intra.42.fr/oauth/authorize";
 
@@ -17,8 +17,8 @@ export class UserManager {
 		this.ftApp = ftApp;
 	}
 
-	async registerUser(userTokenData: UserTokenData, appCredential: AppCredential) {
-		const user = new User(this.ftApp, userTokenData, appCredential);
+	async registerUser(userTokenData: UserTokenData, oauthConfig: OAuth2ClientConfig) {
+		const user = new User(this.ftApp, userTokenData, oauthConfig);
 		await user.load();
 		this.users.push(user);
 		this.ftApp.events.emit("userAdd", user);
@@ -56,17 +56,18 @@ export class UserManager {
 				return sendRawResponse(res, 400, "Authentification Error");
 			}
 
-			const appCredential = this.ftApp.credentialsManager.appCredentials.find((appCredential) => appCredential.appConfig.uid === state);
+			const appCredential = this.ftApp.credentialsManager.appCredentials.find((appCredential) => appCredential.oauthConfig.uid === state);
 			if (appCredential === undefined) {
 				if (errorPage) {
 					return redirectResponse(res, errorPage);
 				}
 				return sendRawResponse(res, 400, "Authentification Error");
 			}
+			const oauthConfig = appCredential.oauthConfig;
 
 			try {
-				const tokenData = await fetchUserToken(code, appCredential.appConfig);
-				(req as AuthenticatedRequest).user = await this.registerUser(tokenData, appCredential);
+				const tokenData = await fetchUserToken(code, oauthConfig);
+				(req as AuthenticatedRequest).user = await this.registerUser(tokenData, oauthConfig);
 
 				if (isExpress) return next();
 				if (successPage) {
