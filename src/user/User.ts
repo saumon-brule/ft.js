@@ -1,5 +1,5 @@
 import { FtApp } from "~/app/App";
-import { UserToken } from "./UserToken";
+import { UserCredential } from "./UserCredential";
 import { UserHttpClient } from "~/app/client/UserHttpClient";
 import { fetchMe } from "~/api/me";
 import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
@@ -8,12 +8,12 @@ import { UserTokenData } from "~/structures/FtTokenData";
 export class User {
 	id: number | null = null;
 	ftApp: FtApp;
-	credentials: UserToken;
+	credentials: UserCredential;
 	httpClient: UserHttpClient;
 
 	constructor (ftApp: FtApp, userTokenData: UserTokenData, oauthConfig: OAuth2ClientConfig) {
 		this.ftApp = ftApp;
-		this.credentials = new UserToken(userTokenData, oauthConfig);
+		this.credentials = new UserCredential(userTokenData, oauthConfig);
 		this.httpClient = new UserHttpClient(this);
 	}
 

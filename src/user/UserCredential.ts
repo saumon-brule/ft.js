@@ -2,7 +2,7 @@ import { fetchRefreshUserToken } from "~/api/oauth/token";
 import { UserTokenData } from "~/structures/FtTokenData";
 import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
 
-export class UserToken {
+export class UserCredential {
 	private _tokenData: UserTokenData | null;
 	oauthConfig: OAuth2ClientConfig;
 
