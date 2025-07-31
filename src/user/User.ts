@@ -1,9 +1,9 @@
-import { UserTokenData } from "~/api/oauth/token";
 import { FtApp } from "~/app/App";
 import { AppCredential } from "~/app/TokenManager/AppCredential";
 import { UserToken } from "./UserToken";
 import { UserHttpClient } from "~/app/client/UserHttpClient";
 import { fetchMe } from "~/api/me";
+import { UserTokenData } from "~/structures/FtTokenData";
 
 export class User {
 	id: number | null = null;

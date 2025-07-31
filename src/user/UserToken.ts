@@ -1,5 +1,6 @@
 import { copyFileSync } from "fs";
-import { fetchRefreshUserToken, UserTokenData } from "~/api/oauth/token";
+import { fetchRefreshUserToken } from "~/api/oauth/token";
+import { UserTokenData } from "~/structures/FtTokenData";
 import { AppCredential } from "~/app/TokenManager/AppCredential";
 
 export class UserToken {

@@ -1,10 +1,11 @@
 import { User } from "~/user/User";
-import { fetchUserToken, UserTokenData } from "~/api/oauth/token";
+import { fetchUserToken } from "~/api/oauth/token";
 import { FtApp } from "../App";
 import { AppCredential } from "../TokenManager/AppCredential";
 import { sendRawResponse, redirectResponse } from "../server/serverResponsesHandler";
 import { IncomingMessage, ServerResponse } from "node:http";
 import { AuthenticatedRequest } from "~/structures/AuthenticatedRequest";
+import { UserTokenData } from "~/structures/FtTokenData";
 
 const INTRA_OAUTH_URL = "https://api.intra.42.fr/oauth/authorize";
 

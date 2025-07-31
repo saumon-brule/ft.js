@@ -1,19 +1,11 @@
 import { resolvePtr } from "node:dns/promises";
 import { API_BASE } from "~/constants/FtApiBase";
 import { FtApiFetchError } from "~/generic/class/FtApiFetchError";
+import { AppTokenData, UserTokenData } from "~/structures/FtTokenData";
 import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
 import { checkStatus } from "~/typeguards/checkStatus";
 
 const ROUTE = "/oauth/token";
-
-export type AppTokenData = {
-	access_token: string,
-	token_type: string,
-	expires_in: number,
-	scope: string,
-	created_at: number,
-	secret_valid_until: number
-}
 
 function appTokenResponseGuard(data: unknown): data is AppTokenData {
 	return data !== null && typeof data === "object"
@@ -51,16 +43,6 @@ export async function fetchAppToken(uid: string, secret: string) {
 			}
 			throw new Error(`Unexpected status: ${response.status}`);
 		});
-}
-
-export type UserTokenData = {
-	access_token: string,
-	token_type: string,
-	expires_in: number,
-	refresh_token: string,
-	scope: string,
-	created_at: number,
-	secret_valid_until: number
 }
 
 function userTokenResponseGuard(data: unknown): data is UserTokenData {
