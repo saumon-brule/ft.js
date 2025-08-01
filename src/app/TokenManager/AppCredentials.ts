@@ -46,8 +46,17 @@ export class AppCredentials {
 		return this._refreshPromise;
 	}
 
+	get isValid() {
+		return Date.now() < this.expiresAt;
+	}
+
 	async ensureTokenValidity() {
-		if (Date.now() >= this.expiresAt)
-			await this.requestNewToken();
+		if (!this._tokenData || !this.isValid)
+			return this.requestNewToken();
+	}
+
+	async getAccessToken() {
+		await this.ensureTokenValidity();
+		return this.token;
 	}
 }

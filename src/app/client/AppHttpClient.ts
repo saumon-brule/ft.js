@@ -11,10 +11,10 @@ export class AppHttpClient extends FtHttpClient {
 	}
 
 	protected async createFetchInit(method: Method, options: RequestInit): Promise<RequestInit> {
+		const appToken = await this.ftApp.credentialsManager.getAccessToken();
 		const headers = new Headers();
-		if (!headers.has("Authorization")) {
-			headers.append("Authorization", `Bearer ${this.ftApp.credentialsManager.token}`);
-		}
+		headers.append("Authorization", `Bearer ${appToken}`);
+
 		return {
 			...options,
 			method,

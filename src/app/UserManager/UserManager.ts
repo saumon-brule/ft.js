@@ -27,7 +27,7 @@ export class UserManager {
 
 	authenticate() {
 		return (_: IncomingMessage, res: ServerResponse) => {
-			const userConfig = this.ftApp.credentialsManager.config;
+			const userConfig = this.ftApp.credentialsManager.oauthConfig;
 			const params = new URLSearchParams();
 			params.append("client_id", userConfig.uid);
 			params.append("redirect_uri", userConfig.redirectURI);
@@ -56,14 +56,14 @@ export class UserManager {
 				return sendRawResponse(res, 400, "Authentification Error");
 			}
 
-			const appCredential = this.ftApp.credentialsManager.appCredentialsList.find((appCredential) => appCredential.oauthConfig.uid === state);
-			if (appCredential === undefined) {
+			const appCredentials = this.ftApp.credentialsManager.getCredentialByUid(state);
+			if (appCredentials === undefined) {
 				if (errorPage) {
 					return redirectResponse(res, errorPage);
 				}
 				return sendRawResponse(res, 400, "Authentification Error");
 			}
-			const oauthConfig = appCredential.oauthConfig;
+			const oauthConfig = appCredentials.oauthConfig;
 
 			try {
 				const tokenData = await fetchUserToken(code, oauthConfig);

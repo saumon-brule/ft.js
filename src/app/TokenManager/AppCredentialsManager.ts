@@ -17,28 +17,57 @@ export class AppCredentialsManager {
 		});
 	}
 
+	private get _current() {
+		return this.appCredentialsList[this.activeAppTokenIndex];
+	}
+
 	private shift(offset: number = 1) {
 		this.activeAppTokenIndex = (this.activeAppTokenIndex + offset) % this.appCredentialsList.length;
 	}
 
-	activeToken(): string | null {
-		return this.appCredentialsList[this.activeAppTokenIndex].token;
+	get credentials() {
+		const credentials = this._current;
+		this.shift();
+		return credentials;
 	}
 
-	get config() {
-		const oauthConfig = this.appCredentialsList[this.activeAppTokenIndex].oauthConfig;
+	get oauthConfig() {
+		const oauthConfig = this._current.oauthConfig;
 		this.shift();
 		return oauthConfig;
 	}
 
 	get token() {
-		const startIndex = this.activeAppTokenIndex;
-		do {
-			const token = this.activeToken();
-			this.shift();
-			if (token)
-				return token;
-		} while (startIndex != this.activeAppTokenIndex);
-		return null;
+		const token = this._current.token;
+		this.shift();
+		return token;
+	}
+
+	get isValid() {
+		return this._current.isValid;
+	}
+
+	async ensureTokenValidity() {
+		return this._current.ensureTokenValidity();
+	}
+
+	async getAccessToken() {
+		const currentCredentials = this._current;
+		this.shift();
+		return currentCredentials.getAccessToken();
+	}
+
+	async requestNewToken() {
+		this._current.requestNewToken();
+	}
+
+	async requestNewTokens() {
+		const promiseList: Promise<void>[] = [];
+		this.appCredentialsList.forEach((appCredentials) => promiseList.push(appCredentials.requestNewToken()));
+		return Promise.all(promiseList);
+	}
+
+	getCredentialByUid(uid: string) {
+		return this.appCredentialsList.find((appCredentials) => appCredentials.oauthConfig.uid === uid);
 	}
 }

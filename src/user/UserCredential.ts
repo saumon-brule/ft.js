@@ -46,12 +46,12 @@ export class UserCredential {
 		return this._refreshPromise;
 	}
 
-	isValid() {
+	get isValid() {
 		return Date.now() < this.expiresAt;
 	}
 
 	async ensureTokenValidity() {
-		if (!this.isValid())
+		if (!this.isValid)
 			await this.requestNewToken();
 	}
 
