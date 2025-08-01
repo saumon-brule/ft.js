@@ -8,38 +8,38 @@ a way to refresh every possible token
 
 */
 export class AppCredentialsManager {
-	appCredentialsList: AppCredentials[];
-	private activeAppTokenIndex: number = 0;
+	protected _appCredentialsList: AppCredentials[];
+	protected _activeAppTokenIndex: number = 0;
 
 	constructor(configs: OAuth2ClientConfig[]) {
-		this.appCredentialsList = configs.map((config) => {
+		this._appCredentialsList = configs.map((config) => {
 			return new AppCredentials(config);
 		});
 	}
 
-	private get _current() {
-		return this.appCredentialsList[this.activeAppTokenIndex];
+	protected get _current() {
+		return this._appCredentialsList[this._activeAppTokenIndex];
 	}
 
-	private shift(offset: number = 1) {
-		this.activeAppTokenIndex = (this.activeAppTokenIndex + offset) % this.appCredentialsList.length;
+	protected _shift(offset: number = 1) {
+		this._activeAppTokenIndex = (this._activeAppTokenIndex + offset) % this._appCredentialsList.length;
 	}
 
 	get credentials() {
 		const credentials = this._current;
-		this.shift();
+		this._shift();
 		return credentials;
 	}
 
 	get oauthConfig() {
 		const oauthConfig = this._current.oauthConfig;
-		this.shift();
+		this._shift();
 		return oauthConfig;
 	}
 
 	get token() {
 		const token = this._current.token;
-		this.shift();
+		this._shift();
 		return token;
 	}
 
@@ -53,7 +53,7 @@ export class AppCredentialsManager {
 
 	async getAccessToken() {
 		const currentCredentials = this._current;
-		this.shift();
+		this._shift();
 		return currentCredentials.getAccessToken();
 	}
 
@@ -63,11 +63,11 @@ export class AppCredentialsManager {
 
 	async requestNewTokens() {
 		const promiseList: Promise<void>[] = [];
-		this.appCredentialsList.forEach((appCredentials) => promiseList.push(appCredentials.requestNewToken()));
+		this._appCredentialsList.forEach((appCredentials) => promiseList.push(appCredentials.requestNewToken()));
 		return Promise.all(promiseList);
 	}
 
 	getCredentialByUid(uid: string) {
-		return this.appCredentialsList.find((appCredentials) => appCredentials.oauthConfig.uid === uid);
+		return this._appCredentialsList.find((appCredentials) => appCredentials.oauthConfig.uid === uid);
 	}
 }

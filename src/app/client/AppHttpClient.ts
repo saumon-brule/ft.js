@@ -10,7 +10,7 @@ export class AppHttpClient extends FtHttpClient {
 		this.ftApp = ftApp;
 	}
 
-	protected async createFetchInit(method: Method, options: RequestInit): Promise<RequestInit> {
+	protected async _createFetchInit(method: Method, options: RequestInit): Promise<RequestInit> {
 		const appToken = await this.ftApp.credentialsManager.getAccessToken();
 		const headers = new Headers();
 		headers.append("Authorization", `Bearer ${appToken}`);
