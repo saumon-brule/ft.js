@@ -1,4 +1,4 @@
-import { AppCredential } from "./AppCredential";
+import { AppCredentials } from "./AppCredentials";
 import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
 
 /*
@@ -8,27 +8,27 @@ a way to refresh every possible token
 
 */
 export class AppCredentialsManager {
-	appCredentials: AppCredential[];
+	appCredentialsList: AppCredentials[];
 	private activeAppTokenIndex: number = 0;
 
 	constructor(configs: OAuth2ClientConfig[]) {
-		this.appCredentials = configs.map((config) => {
-			return new AppCredential(config);
+		this.appCredentialsList = configs.map((config) => {
+			return new AppCredentials(config);
 		});
 	}
 
 	private shift(offset: number = 1) {
-		this.activeAppTokenIndex = (this.activeAppTokenIndex + offset) % this.appCredentials.length;
+		this.activeAppTokenIndex = (this.activeAppTokenIndex + offset) % this.appCredentialsList.length;
 	}
 
 	activeToken(): string | null {
-		return this.appCredentials[this.activeAppTokenIndex].token;
+		return this.appCredentialsList[this.activeAppTokenIndex].token;
 	}
 
 	get config() {
-		const credentials = this.appCredentials[this.activeAppTokenIndex].oauthConfig;
+		const oauthConfig = this.appCredentialsList[this.activeAppTokenIndex].oauthConfig;
 		this.shift();
-		return credentials;
+		return oauthConfig;
 	}
 
 	get token() {

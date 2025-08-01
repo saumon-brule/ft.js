@@ -2,7 +2,7 @@ import { fetchAppToken } from "~/api/oauth/token";
 import { AppTokenData } from "~/structures/FtTokenData";
 import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
 
-export class AppCredential {
+export class AppCredentials {
 	private _tokenData: AppTokenData | null | undefined = undefined;
 	oauthConfig: OAuth2ClientConfig;
 

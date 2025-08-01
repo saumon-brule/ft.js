@@ -1,5 +1,4 @@
 import { ApiRoute } from "~/structures/ApiRoute";
-import { FtApp } from "../app/App";
 import { API_BASE } from "~/constants/FtApiBase";
 import { Method } from "~/structures/Method";
 

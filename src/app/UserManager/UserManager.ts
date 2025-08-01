@@ -56,7 +56,7 @@ export class UserManager {
 				return sendRawResponse(res, 400, "Authentification Error");
 			}
 
-			const appCredential = this.ftApp.credentialsManager.appCredentials.find((appCredential) => appCredential.oauthConfig.uid === state);
+			const appCredential = this.ftApp.credentialsManager.appCredentialsList.find((appCredential) => appCredential.oauthConfig.uid === state);
 			if (appCredential === undefined) {
 				if (errorPage) {
 					return redirectResponse(res, errorPage);
