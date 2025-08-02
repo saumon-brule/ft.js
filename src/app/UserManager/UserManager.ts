@@ -17,12 +17,19 @@ export class UserManager {
 		this.ftApp = ftApp;
 	}
 
+	getUserById(id: number) {
+		return this.users.find((user) => user.id === id);
+	}
+
 	async registerUser(userTokenData: UserTokenData, oauthConfig: OAuth2ClientConfig) {
-		const user = new User(this.ftApp, userTokenData, oauthConfig);
-		await user.load();
-		this.users.push(user);
-		this.ftApp.events.emit("userAdd", user);
-		return user;
+		const newUser = await User.create(this.ftApp, userTokenData, oauthConfig);
+		let user = this.getUserById(newUser.id);
+		if (!user) {
+			user = newUser;
+		}
+		this.users.push(newUser);
+		this.ftApp.events.emit("userAdd", newUser);
+		return newUser;
 	}
 
 	authenticate() {
