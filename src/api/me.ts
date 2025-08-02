@@ -1,13 +1,21 @@
-import z from "zod";
-import { User } from "~/user/User";
-import { meSchema } from "./me.schema";
+// import z from "zod";
+// import { meSchema } from "./me.schema";
+import { API_BASE } from "~/constants/FtApiBase";
+import { checkStatus } from "~/typeguards/checkStatus";
+import { FtApiFetchError } from "~/generic/class/FtApiFetchError";
+import { handleFtApiResponse } from "~/generic/request/handleResponse";
+import FtApiHeaders from "~/generic/request/FtHeaders";
 
 const ROUTE = "/v2/me";
 
-export async function fetchMe(user: User): Promise<z.infer<typeof meSchema>> {
-	return user.httpClient.get(ROUTE)
-		.then((response) => response.json())
-		.then((data) => {
-			return meSchema.parse(data);
-		});
+export async function fetchMe(token: string, options?: RequestInit): Promise<any>/*Promise<z.infer<typeof meSchema>>*/ {
+	const headers = new FtApiHeaders(token);
+
+	const usedOptions: RequestInit = {
+		headers,
+		...options
+	};
+
+	return fetch(`${API_BASE}${ROUTE}`, usedOptions)
+		.then((response) => handleFtApiResponse(ROUTE, response, (data) => data));
 }

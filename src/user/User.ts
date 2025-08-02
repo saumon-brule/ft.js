@@ -18,7 +18,7 @@ export class User {
 	}
 
 	async load() {
-		const data = await fetchMe(this);
+		const data = await fetchMe(this.credentials.token);
 		if (!data.id) throw new Error("No user id after fetch");
 		this.id = data.id;
 	}
