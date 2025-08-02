@@ -2,7 +2,7 @@
 // import { meSchema } from "./me.schema";
 import { API_BASE } from "~/constants/FtApiBase";
 import { checkStatus } from "~/typeguards/checkStatus";
-import { FtApiFetchError } from "~/generic/class/FtApiFetchError";
+import { FtApiFetchError } from "~/generic/request/FtApiFetchError";
 import { handleFtApiResponse } from "~/generic/request/handleResponse";
 import FtApiHeaders from "~/generic/request/FtHeaders";
 

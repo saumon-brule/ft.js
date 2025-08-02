@@ -1,6 +1,6 @@
 import { resolvePtr } from "node:dns/promises";
 import { API_BASE } from "~/constants/FtApiBase";
-import { FtApiFetchError } from "~/generic/class/FtApiFetchError";
+import { FtApiFetchError } from "~/generic/request/FtApiFetchError";
 import { AppTokenData, UserTokenData } from "~/structures/FtTokenData";
 import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
 import { checkStatus } from "~/typeguards/checkStatus";
