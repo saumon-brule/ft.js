@@ -28,7 +28,7 @@ export class UserManager {
 			user = newUser;
 		}
 		this.users.push(newUser);
-		this.ftApp.events.emit("userAdd", newUser);
+		this.ftApp.emit("userAdd", newUser);
 		return newUser;
 	}
 
