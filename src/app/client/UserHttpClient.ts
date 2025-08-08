@@ -1,4 +1,4 @@
-import { FtHttpClient } from "~/generic/class/HttpClient";
+import { FtHttpClient } from "~/generic/request/HttpClient";
 import { User } from "~/user/User";
 import { Method } from "~/structures/Method";
 
