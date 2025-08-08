@@ -4,6 +4,7 @@ import { UserHttpClient } from "~/app/client/UserHttpClient";
 import { fetchMe } from "~/api/me";
 import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
 import { UserTokenData } from "~/structures/FtTokenData";
+import { ApiRoute } from "~/structures/ApiRoute";
 
 
 export class User {
@@ -12,7 +13,7 @@ export class User {
 	credentials: UserCredential;
 	httpClient: UserHttpClient;
 
-	private constructor (ftApp: FtApp, credentials: UserCredential, data: any) {
+	private constructor(ftApp: FtApp, credentials: UserCredential, data: any) {
 		this.ftApp = ftApp;
 		this.credentials = credentials;
 		this.httpClient = new UserHttpClient(this);
@@ -24,5 +25,13 @@ export class User {
 		const data = await fetchMe(await credentials.getAccessToken());
 		if (!data.id) throw new Error("No user id after fetch");
 		return new User(ftApp, credentials, data);
+	}
+
+	get(route: ApiRoute, options?: RequestInit) {
+		return this.httpClient.get(route, options);
+	}
+
+	post(route: ApiRoute, options: RequestInit) {
+		return this.httpClient.post(route, options);
 	}
 }
