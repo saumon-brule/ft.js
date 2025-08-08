@@ -1,6 +1,6 @@
 import { configDotenv } from "dotenv";
 configDotenv({ quiet: true });
-import { AuthenticatedRequest, FtApp } from "../dist/index.js";
+import Ft from "../dist/index.js";
 import express from "express";
 import jwt from "jsonwebtoken";
 
@@ -8,23 +8,40 @@ process.on("uncaughtException", (error) => {
 	console.trace(error);
 });
 
-const App = new FtApp([
+const ft = new Ft([
 	{ uid: process.env.APP_UID, secret: process.env.APP_SECRET, redirectURI: "http://localhost:3042/callback" }
 ]);
 
-async function getAllUsers() {
-	App.httpClient.get("/v2/campus/9/users?filter[pool_year]=2024,2023")
-		.then((response) => response.json())
-		.then((data) => {
-			console.log(data);
-		});
-}
 
-getAllUsers();
+// async function getAllUsers() {
+// 	let page = 0;
+// 	let len;
+// 	do {
+// 		await ft.get(`/v2/campus/9/users?filter[pool_year]=>2024&filter[kind]=student&per_page=100&page=${page}`)
+// 			.then((response) => response.json())
+// 			.then((data) => {
+// 				data.forEach(user => {
+// 					allUsers.push({ profilePicture: data.image?.link, login: user.login, displayName: user.displayName });
+// 				});
+// 				len = data.length;
+// 			});
+// 		page += 1;
+// 	} while (len === 100);
+// }
+
+// getAllUsers();
+
+ft.get("/v2/users").then((response) => response.json()).then(console.log);
+
+ft.on("userAdd", (user) => {
+	user.get("/v2/me")
+		.then((response) => response.json())
+		.then((me) => console.log(me.kind));
+});
 
 const app = express();
 
-app.get("/", App.userManager.authenticate());
+app.get("/", ft.userManager.authenticate());
 
 app.get("/error", (_, res) => {
 	res.send("Authentification error");
@@ -35,11 +52,9 @@ app.get("/success", (_, res) => {
 });
 
 app.get("/callback",
-	App.userManager.callback({ errorPage: "/error" }),
+	ft.userManager.callback({ errorPage: "/error" }),
 	(req, res) => {
-		console.log(process.env.JWT_SECRET);
 		const userJwt = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-		console.log(jwt.verify(userJwt, process.env.JWT_SECRET));
 		res.cookie("ft_people_token", userJwt, {
 			httpOnly: true,
 			secure: true,
