@@ -2,7 +2,7 @@ import { resolvePtr } from "node:dns/promises";
 import { API_BASE } from "~/constants/FtApiBase";
 import { FtApiFetchError } from "~/generic/request/FtApiFetchError";
 import { AppTokenData, UserTokenData } from "~/structures/FtTokenData";
-import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
+import { OAuth2Credentials } from "~/structures/OAuth2Credentials";
 import { checkStatus } from "~/typeguards/checkStatus";
 
 const ROUTE = "/oauth/token";
@@ -57,13 +57,13 @@ function userTokenResponseGuard(data: unknown): data is UserTokenData {
 		&& "secret_valid_until" in data && typeof data.secret_valid_until === "number";
 }
 
-export async function fetchUserToken(code: string, config: OAuth2ClientConfig) {
+export async function fetchUserToken(code: string, oauth2Credentials: OAuth2Credentials) {
 	const body = new URLSearchParams();
 	body.append("grant_type", "authorization_code");
 	body.append("code", code);
-	body.append("client_id", config.uid);
-	body.append("client_secret", config.secret);
-	body.append("redirect_uri", config.redirectURI);
+	body.append("client_id", oauth2Credentials.uid);
+	body.append("client_secret", oauth2Credentials.secret);
+	body.append("redirect_uri", oauth2Credentials.redirectURI);
 	body.append("scope", "identify");
 
 	const options: RequestInit = {
@@ -86,12 +86,12 @@ export async function fetchUserToken(code: string, config: OAuth2ClientConfig) {
 	});
 }
 
-export async function fetchRefreshUserToken(refreshToken: string, config: OAuth2ClientConfig) {
+export async function fetchRefreshUserToken(refreshToken: string, oauth2Credentials: OAuth2Credentials) {
 	const body = new URLSearchParams();
 	body.append("grant_type", "refresh_token");
 	body.append("refresh_token", refreshToken);
-	body.append("client_id", config.uid);
-	body.append("client_secret", config.secret);
+	body.append("client_id", oauth2Credentials.uid);
+	body.append("client_secret", oauth2Credentials.secret);
 
 	const options: RequestInit = {
 		method: "POST",

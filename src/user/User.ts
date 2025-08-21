@@ -2,7 +2,7 @@ import { FtApp } from "~/app/App";
 import { UserCredential } from "./UserCredential";
 import { UserHttpClient } from "~/app/client/UserHttpClient";
 import { fetchMe } from "~/api/me";
-import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
+import { OAuth2Credentials } from "~/structures/OAuth2Credentials";
 import { UserTokenData } from "~/structures/FtTokenData";
 import { ApiRoute } from "~/structures/ApiRoute";
 
@@ -20,8 +20,8 @@ export class User {
 		this.id = data.id;
 	}
 
-	static async create(ftApp: FtApp, userTokenData: UserTokenData, oauthConfig: OAuth2ClientConfig) {
-		const credentials = new UserCredential(userTokenData, oauthConfig);
+	static async create(ftApp: FtApp, userTokenData: UserTokenData, oauth2Credentials: OAuth2Credentials) {
+		const credentials = new UserCredential(userTokenData, oauth2Credentials);
 		const data = await fetchMe(await credentials.getAccessToken());
 		if (!data.id) throw new Error("No user id after fetch");
 		return new User(ftApp, credentials, data);

@@ -1,4 +1,4 @@
-export type OAuth2ClientConfig = {
+export type OAuth2Credentials = {
 	uid: string,
 	secret: string,
 	redirectURI: string

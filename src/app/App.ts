@@ -1,6 +1,6 @@
 import { AppCredentialsManager } from "./TokenManager/AppCredentialsManager";
 import { UserManager } from "./UserManager/UserManager";
-import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
+import { OAuth2Credentials } from "~/structures/OAuth2Credentials";
 import EventEmitter from "events";
 import { FtEvent } from "~/structures/Events";
 import { AppHttpClient } from "./client/AppHttpClient";
@@ -11,9 +11,9 @@ export class FtApp extends EventEmitter<FtEvent> {
 	userManager: UserManager;
 	httpClient: AppHttpClient;
 
-	constructor(configs: OAuth2ClientConfig[]) {
+	constructor(oauth2CredentialsList: OAuth2Credentials[]) {
 		super();
-		this.credentialsManager = new AppCredentialsManager(configs);
+		this.credentialsManager = new AppCredentialsManager(oauth2CredentialsList);
 		this.userManager = new UserManager(this);
 		this.httpClient = new AppHttpClient(this);
 	}

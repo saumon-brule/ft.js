@@ -1,16 +1,16 @@
 import { fetchRefreshUserToken } from "~/api/oauth/token";
 import { UserTokenData } from "~/structures/FtTokenData";
-import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
+import { OAuth2Credentials } from "~/structures/OAuth2Credentials";
 
 export class UserCredential {
 	private _tokenData: UserTokenData | null;
-	oauthConfig: OAuth2ClientConfig;
+	oauth2Credentials: OAuth2Credentials;
 
 	private _refreshPromise: Promise<void> | null = null;
 
-	constructor(tokenDataInit: UserTokenData, oauthConfig: OAuth2ClientConfig) {
+	constructor(tokenDataInit: UserTokenData, oauth2Credentials: OAuth2Credentials) {
 		this._tokenData = tokenDataInit;
-		this.oauthConfig = oauthConfig;
+		this.oauth2Credentials = oauth2Credentials;
 	}
 
 	private get _data(): UserTokenData {
@@ -35,7 +35,7 @@ export class UserCredential {
 
 		this._refreshPromise = new Promise(async (resolve, reject) => {
 			try {
-				const tokenData = await fetchRefreshUserToken(this.refreshToken, this.oauthConfig);
+				const tokenData = await fetchRefreshUserToken(this.refreshToken, this.oauth2Credentials);
 				this._tokenData = tokenData;
 				resolve();
 			} catch (error) {

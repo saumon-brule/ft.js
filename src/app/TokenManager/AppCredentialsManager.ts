@@ -1,5 +1,5 @@
 import { AppCredentials } from "./AppCredentials";
-import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
+import { OAuth2Credentials } from "~/structures/OAuth2Credentials";
 
 /*
 missing :
@@ -11,9 +11,9 @@ export class AppCredentialsManager {
 	protected _appCredentialsList: AppCredentials[];
 	protected _activeAppTokenIndex: number = 0;
 
-	constructor(configs: OAuth2ClientConfig[]) {
-		this._appCredentialsList = configs.map((config) => {
-			return new AppCredentials(config);
+	constructor(oauth2CredentialsList: OAuth2Credentials[]) {
+		this._appCredentialsList = oauth2CredentialsList.map((oauth2Credentials) => {
+			return new AppCredentials(oauth2Credentials);
 		});
 	}
 
@@ -31,10 +31,10 @@ export class AppCredentialsManager {
 		return credentials;
 	}
 
-	get oauthConfig() {
-		const oauthConfig = this._current.oauthConfig;
+	get oauth2Credentials() {
+		const oauth2Credentials = this._current.oauth2Credentials;
 		this._shift();
-		return oauthConfig;
+		return oauth2Credentials;
 	}
 
 	get token() {
@@ -68,6 +68,6 @@ export class AppCredentialsManager {
 	}
 
 	getCredentialByUid(uid: string) {
-		return this._appCredentialsList.find((appCredentials) => appCredentials.oauthConfig.uid === uid);
+		return this._appCredentialsList.find((appCredentials) => appCredentials.oauth2Credentials.uid === uid);
 	}
 }

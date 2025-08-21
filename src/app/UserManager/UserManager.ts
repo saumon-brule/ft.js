@@ -5,7 +5,7 @@ import { sendRawResponse, redirectResponse } from "../server/serverResponsesHand
 import { IncomingMessage, ServerResponse } from "node:http";
 import { AuthenticatedRequest } from "~/structures/AuthenticatedRequest";
 import { UserTokenData } from "~/structures/FtTokenData";
-import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
+import { OAuth2Credentials } from "~/structures/OAuth2Credentials";
 
 const INTRA_OAUTH_URL = "https://api.intra.42.fr/oauth/authorize";
 
@@ -21,8 +21,8 @@ export class UserManager {
 		return this.users.find((user) => user.id === id);
 	}
 
-	async registerUser(userTokenData: UserTokenData, oauthConfig: OAuth2ClientConfig) {
-		const newUser = await User.create(this.ftApp, userTokenData, oauthConfig);
+	async registerUser(userTokenData: UserTokenData, oauth2Credentials: OAuth2Credentials) {
+		const newUser = await User.create(this.ftApp, userTokenData, oauth2Credentials);
 		let user = this.getUserById(newUser.id);
 		if (!user) {
 			user = newUser;
@@ -34,7 +34,7 @@ export class UserManager {
 
 	authenticate() {
 		return (_: IncomingMessage, res: ServerResponse) => {
-			const userConfig = this.ftApp.credentialsManager.oauthConfig;
+			const userConfig = this.ftApp.credentialsManager.oauth2Credentials;
 			const params = new URLSearchParams();
 			params.append("client_id", userConfig.uid);
 			params.append("redirect_uri", userConfig.redirectURI);
@@ -70,11 +70,11 @@ export class UserManager {
 				}
 				return sendRawResponse(res, 400, "Authentification Error");
 			}
-			const oauthConfig = appCredentials.oauthConfig;
+			const oauth2Credentials = appCredentials.oauth2Credentials;
 
 			try {
-				const tokenData = await fetchUserToken(code, oauthConfig);
-				(req as AuthenticatedRequest).user = await this.registerUser(tokenData, oauthConfig);
+				const tokenData = await fetchUserToken(code, oauth2Credentials);
+				(req as AuthenticatedRequest).user = await this.registerUser(tokenData, oauth2Credentials);
 
 				if (isExpress) return next();
 				if (successPage) {

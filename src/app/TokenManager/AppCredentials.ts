@@ -1,15 +1,15 @@
 import { fetchAppToken } from "~/api/oauth/token";
 import { AppTokenData } from "~/structures/FtTokenData";
-import { OAuth2ClientConfig } from "~/structures/OAuth2ClientConfig";
+import { OAuth2Credentials } from "~/structures/OAuth2Credentials";
 
 export class AppCredentials {
 	private _tokenData: AppTokenData | null | undefined = undefined;
-	oauthConfig: OAuth2ClientConfig;
+	oauth2Credentials: OAuth2Credentials;
 
 	private _refreshPromise: Promise<void> | null = null;
 
-	constructor(oauthConfig: OAuth2ClientConfig) {
-		this.oauthConfig = oauthConfig;
+	constructor(oauth2Credentials: OAuth2Credentials) {
+		this.oauth2Credentials = oauth2Credentials;
 		this.requestNewToken();
 	}
 
@@ -35,7 +35,7 @@ export class AppCredentials {
 
 		this._refreshPromise = new Promise(async (resolve, reject) => {
 			try {
-				const tokenData = await fetchAppToken(this.oauthConfig.uid, this.oauthConfig.secret);
+				const tokenData = await fetchAppToken(this.oauth2Credentials.uid, this.oauth2Credentials.secret);
 				this._tokenData = tokenData;
 				resolve();
 			} catch (error) {
