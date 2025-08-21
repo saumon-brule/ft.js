@@ -5,7 +5,7 @@ import { sendRawResponse, redirectResponse } from "../server/serverResponsesHand
 import { IncomingMessage, ServerResponse } from "node:http";
 import { AuthenticatedRequest } from "~/structures/AuthenticatedRequest";
 import { UserTokenData } from "~/structures/FtTokenData";
-import { OAuth2Credentials } from "~/structures/OAuth2Credentials";
+import { OAuth2Credentials } from "~/app/TokenManager/OAuth2Credentials";
 
 const INTRA_OAUTH_URL = "https://api.intra.42.fr/oauth/authorize";
 

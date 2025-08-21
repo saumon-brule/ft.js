@@ -1,6 +1,6 @@
 import { fetchRefreshUserToken } from "~/api/oauth/token";
 import { UserTokenData } from "~/structures/FtTokenData";
-import { OAuth2Credentials } from "~/structures/OAuth2Credentials";
+import { OAuth2Credentials } from "~/app/TokenManager/OAuth2Credentials";
 
 export class UserCredential {
 	private _tokenData: UserTokenData | null;

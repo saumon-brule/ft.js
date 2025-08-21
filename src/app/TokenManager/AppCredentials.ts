@@ -1,15 +1,19 @@
 import { fetchAppToken } from "~/api/oauth/token";
 import { AppTokenData } from "~/structures/FtTokenData";
-import { OAuth2Credentials } from "~/structures/OAuth2Credentials";
+import { OAuth2Credentials } from "~/app/TokenManager/OAuth2Credentials";
+import { FtApp } from "../App";
+import { OAuth2CredentialsParams } from "~/structures/OAuth2CredentialsParams";
 
 export class AppCredentials {
 	private _tokenData: AppTokenData | null | undefined = undefined;
+	private _ftApp;
 	oauth2Credentials: OAuth2Credentials;
 
 	private _refreshPromise: Promise<void> | null = null;
 
-	constructor(oauth2Credentials: OAuth2Credentials) {
-		this.oauth2Credentials = oauth2Credentials;
+	constructor(oauth2CredentialsParams: OAuth2CredentialsParams, ftApp: FtApp) {
+		this.oauth2Credentials = new OAuth2Credentials(oauth2CredentialsParams);
+		this._ftApp = ftApp;
 		this.requestNewToken();
 	}
 
@@ -24,10 +28,27 @@ export class AppCredentials {
 	get expiresIn(): number { return this._data.expires_in; }
 	get createdAt(): number { return this._data.created_at; }
 	get scope(): string { return this._data.scope; }
-	get secretValidUntil(): number { return this._data.created_at; }
+	get secretValidUntil(): number { return this._data.secret_valid_until; }
 	get expiresAt(): number {
 		const data = this._data;
 		return data.created_at + data.expires_in;
+	}
+
+	async ensureSecretValidity() {
+		const { secretExpirationWarningTime } = this._ftApp.configs;
+
+		const expiringTime = this.secretValidUntil * 1000;
+		const now = Date.now();
+		const expirationWarningTime = now + secretExpirationWarningTime;
+
+		/* !:! I want to setup an event to know when a token is expired, but this isn't the place to do it
+		
+		if (expiringTime < now) {
+			this._ftApp.emit("tokenExpired", this.oauth2Credentials, new Date(expiringTime))
+		} else */
+		if (expiringTime < expirationWarningTime) {
+			this._ftApp.emit("tokenExpirationWarning", this.oauth2Credentials, new Date(expiringTime));
+		}
 	}
 
 	async requestNewToken() {
@@ -37,6 +58,7 @@ export class AppCredentials {
 			try {
 				const tokenData = await fetchAppToken(this.oauth2Credentials.uid, this.oauth2Credentials.secret);
 				this._tokenData = tokenData;
+				await this.ensureSecretValidity();
 				resolve();
 			} catch (error) {
 				this._tokenData = null;

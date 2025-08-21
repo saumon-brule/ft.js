@@ -12,6 +12,7 @@ const ft = new Ft([
 	{ uid: process.env.APP_UID, secret: process.env.APP_SECRET, redirectURI: "http://localhost:3042/callback" }
 ]);
 
+ft.configs.setSecretExpirationWarningTime(1000 * 60 * 60 * 24 * 30);
 
 // async function getAllUsers() {
 // 	let page = 0;
@@ -31,12 +32,17 @@ const ft = new Ft([
 
 // getAllUsers();
 
-ft.get("/v2/users").then((response) => response.json()).then(console.log);
+// ft.get("/v2/users").then((response) => response.json()).then(console.log);
 
 ft.on("userAdd", (user) => {
 	user.get("/v2/me")
 		.then((response) => response.json())
 		.then((me) => console.log(me.kind));
+});
+
+// app is not necessary here because the user already has access to the app (while using ft.on)
+ft.on("tokenExpirationWarning", (oauth2Credentials, expiringDate) => {
+	console.warn("Warning: secret expiring soon")
 });
 
 const app = express();

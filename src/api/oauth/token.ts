@@ -2,7 +2,7 @@ import { resolvePtr } from "node:dns/promises";
 import { API_BASE } from "~/constants/FtApiBase";
 import { FtApiFetchError } from "~/generic/request/FtApiFetchError";
 import { AppTokenData, UserTokenData } from "~/structures/FtTokenData";
-import { OAuth2Credentials } from "~/structures/OAuth2Credentials";
+import { OAuth2Credentials } from "~/app/TokenManager/OAuth2Credentials";
 import { checkStatus } from "~/typeguards/checkStatus";
 
 const ROUTE = "/oauth/token";
