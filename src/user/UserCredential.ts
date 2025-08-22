@@ -35,8 +35,7 @@ export class UserCredential {
 
 		this._refreshPromise = new Promise(async (resolve, reject) => {
 			try {
-				const tokenData = await fetchRefreshUserToken(this.refreshToken, this.oauth2Credentials);
-				this._tokenData = tokenData;
+				this._tokenData = await this.oauth2Credentials.requestRefreshUserToken(this.refreshToken);
 				resolve();
 			} catch (error) {
 				this._tokenData = null;

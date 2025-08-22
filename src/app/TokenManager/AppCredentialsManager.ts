@@ -1,7 +1,7 @@
 import { AppCredentials } from "./AppCredentials";
 import { OAuth2Credentials } from "~/app/TokenManager/OAuth2Credentials";
 import { FtApp } from "../App";
-import { OAuth2CredentialsParams } from "~/structures/OAuth2CredentialsParams";
+import { OAuth2CredentialsProps } from "~/structures/OAuth2CredentialsProps";
 
 /*
 missing :
@@ -13,9 +13,9 @@ export class AppCredentialsManager {
 	protected _appCredentialsList: AppCredentials[];
 	protected _activeAppTokenIndex: number = 0;
 
-	constructor(oauth2CredentialsParamsList: OAuth2CredentialsParams[], ftApp: FtApp) {
-		this._appCredentialsList = oauth2CredentialsParamsList.map((oauth2CredentialsParams) => {
-			return new AppCredentials(oauth2CredentialsParams, ftApp);
+	constructor(oauth2CredentialsPropsList: OAuth2CredentialsProps[], ftApp: FtApp) {
+		this._appCredentialsList = oauth2CredentialsPropsList.map((oauth2CredentialsProps) => {
+			return new AppCredentials(oauth2CredentialsProps, ftApp);
 		});
 	}
 

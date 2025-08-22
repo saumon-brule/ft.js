@@ -57,13 +57,13 @@ function userTokenResponseGuard(data: unknown): data is UserTokenData {
 		&& "secret_valid_until" in data && typeof data.secret_valid_until === "number";
 }
 
-export async function fetchUserToken(code: string, oauth2Credentials: OAuth2Credentials) {
+export async function fetchUserToken(code: string, uid: string, secret: string, redirectURI: string) {
 	const body = new URLSearchParams();
 	body.append("grant_type", "authorization_code");
 	body.append("code", code);
-	body.append("client_id", oauth2Credentials.uid);
-	body.append("client_secret", oauth2Credentials.secret);
-	body.append("redirect_uri", oauth2Credentials.redirectURI);
+	body.append("client_id", uid);
+	body.append("client_secret", secret);
+	body.append("redirect_uri", redirectURI);
 	body.append("scope", "identify");
 
 	const options: RequestInit = {
@@ -86,12 +86,12 @@ export async function fetchUserToken(code: string, oauth2Credentials: OAuth2Cred
 	});
 }
 
-export async function fetchRefreshUserToken(refreshToken: string, oauth2Credentials: OAuth2Credentials) {
+export async function fetchRefreshUserToken(refreshToken: string, uid: string, secret: string) {
 	const body = new URLSearchParams();
 	body.append("grant_type", "refresh_token");
 	body.append("refresh_token", refreshToken);
-	body.append("client_id", oauth2Credentials.uid);
-	body.append("client_secret", oauth2Credentials.secret);
+	body.append("client_id", uid);
+	body.append("client_secret", secret);
 
 	const options: RequestInit = {
 		method: "POST",

@@ -73,7 +73,7 @@ export class UserManager {
 			const oauth2Credentials = appCredentials.oauth2Credentials;
 
 			try {
-				const tokenData = await fetchUserToken(code, oauth2Credentials);
+				const tokenData = await oauth2Credentials.requestUserToken(code);
 				(req as AuthenticatedRequest).user = await this.registerUser(tokenData, oauth2Credentials);
 
 				if (isExpress) return next();

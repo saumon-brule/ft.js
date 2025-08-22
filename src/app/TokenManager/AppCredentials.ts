@@ -2,7 +2,7 @@ import { fetchAppToken } from "~/api/oauth/token";
 import { AppTokenData } from "~/structures/FtTokenData";
 import { OAuth2Credentials } from "~/app/TokenManager/OAuth2Credentials";
 import { FtApp } from "../App";
-import { OAuth2CredentialsParams } from "~/structures/OAuth2CredentialsParams";
+import { OAuth2CredentialsProps } from "~/structures/OAuth2CredentialsProps";
 
 export class AppCredentials {
 	private _tokenData: AppTokenData | null | undefined = undefined;
@@ -11,8 +11,8 @@ export class AppCredentials {
 
 	private _refreshPromise: Promise<void> | null = null;
 
-	constructor(oauth2CredentialsParams: OAuth2CredentialsParams, ftApp: FtApp) {
-		this.oauth2Credentials = new OAuth2Credentials(oauth2CredentialsParams);
+	constructor(oauth2CredentialsProps: OAuth2CredentialsProps, ftApp: FtApp) {
+		this.oauth2Credentials = new OAuth2Credentials(oauth2CredentialsProps);
 		this._ftApp = ftApp;
 		this.requestNewToken();
 	}
@@ -42,7 +42,7 @@ export class AppCredentials {
 		const expirationWarningTime = now + secretExpirationWarningTime;
 
 		/* !:! I want to setup an event to know when a token is expired, but this isn't the place to do it
-		
+
 		if (expiringTime < now) {
 			this._ftApp.emit("tokenExpired", this.oauth2Credentials, new Date(expiringTime))
 		} else */
@@ -56,8 +56,7 @@ export class AppCredentials {
 
 		this._refreshPromise = new Promise(async (resolve, reject) => {
 			try {
-				const tokenData = await fetchAppToken(this.oauth2Credentials.uid, this.oauth2Credentials.secret);
-				this._tokenData = tokenData;
+				this._tokenData = await this.oauth2Credentials.requestAppToken();
 				await this.ensureSecretValidity();
 				resolve();
 			} catch (error) {

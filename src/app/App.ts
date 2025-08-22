@@ -5,7 +5,7 @@ import { FtEvent } from "~/structures/Events";
 import { AppHttpClient } from "./client/AppHttpClient";
 import { ApiRoute } from "~/structures/ApiRoute";
 import { FtConfig, FtConfigProps } from "./configs/FtConfigs";
-import { OAuth2CredentialsParams } from "~/structures/OAuth2CredentialsParams";
+import { OAuth2CredentialsProps } from "~/structures/OAuth2CredentialsProps";
 
 export class FtApp extends EventEmitter<FtEvent> {
 	configs: FtConfig;
@@ -13,10 +13,10 @@ export class FtApp extends EventEmitter<FtEvent> {
 	userManager: UserManager;
 	httpClient: AppHttpClient;
 
-	constructor(oauth2CredentialsParamsList: OAuth2CredentialsParams[], ftConfigProps?: FtConfigProps) {
+	constructor(oauth2CredentialsPropsList: OAuth2CredentialsProps[], ftConfigProps?: FtConfigProps) {
 		super();
 		this.configs = new FtConfig(ftConfigProps);
-		this.credentialsManager = new AppCredentialsManager(oauth2CredentialsParamsList, this);
+		this.credentialsManager = new AppCredentialsManager(oauth2CredentialsPropsList, this);
 		this.userManager = new UserManager(this);
 		this.httpClient = new AppHttpClient(this);
 	}

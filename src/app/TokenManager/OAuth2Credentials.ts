@@ -1,15 +1,16 @@
-import { OAuth2CredentialsParams } from "~/structures/OAuth2CredentialsParams";
+import { fetchAppToken, fetchRefreshUserToken, fetchUserToken } from "~/api/oauth/token";
+import { OAuth2CredentialsProps } from "~/structures/OAuth2CredentialsProps";
 
 export class OAuth2Credentials {
+	#secret: string;
 	private _uid: string;
-	private _secret: string;
 	private _redirectURI?: string;
 
-	constructor(oauth2CredentialsParams: OAuth2CredentialsParams) {
-		this._uid = oauth2CredentialsParams.uid;
-		this._secret = oauth2CredentialsParams.secret;
-		if (oauth2CredentialsParams.redirectURI != undefined) {
-			this._redirectURI = oauth2CredentialsParams.redirectURI;
+	constructor(oauth2CredentialsProps: OAuth2CredentialsProps) {
+		this._uid = oauth2CredentialsProps.uid;
+		this.#secret = oauth2CredentialsProps.secret;
+		if (oauth2CredentialsProps.redirectURI != undefined) {
+			this._redirectURI = oauth2CredentialsProps.redirectURI;
 		}
 	}
 
@@ -17,15 +18,25 @@ export class OAuth2Credentials {
 		return this._uid;
 	}
 
-	get secret() {
-		return this._secret;
-	}
-
 	get redirectURI() {
 		return this._redirectURI ?? "";
 	}
 
 	setSecret(newSecret: string) {
-		this._secret = newSecret;
+		this.#secret = newSecret;
+	}
+
+	async requestAppToken() {
+		return fetchAppToken(this._uid, this.#secret);
+	}
+
+	async requestUserToken(code: string) {
+		if (!this._redirectURI)
+			throw new Error("No redirect URI");
+		return fetchUserToken(code, this._uid, this.#secret, this._redirectURI);
+	}
+
+	async requestRefreshUserToken(refreshToken: string) {
+		return fetchRefreshUserToken(refreshToken, this._uid, this.#secret);
 	}
 };
