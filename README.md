@@ -22,7 +22,7 @@ npm install @saumon-brule/ft.js
 ## Usage
 
 ```js
-import Ft from "ft.js";
+import Ft from "@saumon-brule/ft.js";
 
 const ft = new Ft([
   { clientId: "your_client_id1", clientSecret: "your_client_secret1" },
@@ -37,7 +37,7 @@ You may also want to allow registration to your app for users from a browser.<br
 To allow this, the wrapper provides functions that you can use to create middlewares for an http or express server
 
 ```js
-import Ft from "ft.js";
+import Ft from "@saumon-brule/ft.js";
 import express from "express";
 
 const ft = new Ft([
