@@ -2,8 +2,8 @@ import { FtApp } from "~/app/App";
 import { UserCredential } from "./UserCredential";
 import { UserHttpClient } from "~/app/client/UserHttpClient";
 import { fetchMe } from "~/api/me";
-import { OAuth2Credentials } from "~/app/TokenManager/OAuth2Credentials";
-import { UserTokenData } from "~/structures/FtTokenData";
+import { OAuth2Credentials } from "~/app/credentials/OAuth2Credentials";
+import { UserTokenData } from "~/api/oauth/token.schema";
 import { ApiRoute } from "~/structures/ApiRoute";
 
 

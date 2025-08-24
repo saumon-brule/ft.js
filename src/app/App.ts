@@ -1,4 +1,4 @@
-import { AppCredentialsManager } from "./TokenManager/AppCredentialsManager";
+import { AppCredentialsManager } from "./credentials/AppCredentialsManager";
 import { UserManager } from "./UserManager/UserManager";
 import EventEmitter from "events";
 import { FtEvent } from "~/structures/Events";

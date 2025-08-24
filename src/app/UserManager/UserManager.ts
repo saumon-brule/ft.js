@@ -4,8 +4,8 @@ import { FtApp } from "../App";
 import { sendRawResponse, redirectResponse } from "../server/serverResponsesHandler";
 import { IncomingMessage, ServerResponse } from "node:http";
 import { AuthenticatedRequest } from "~/structures/AuthenticatedRequest";
-import { UserTokenData } from "~/structures/FtTokenData";
-import { OAuth2Credentials } from "~/app/TokenManager/OAuth2Credentials";
+import { UserTokenData } from "~/api/oauth/token.schema";
+import { OAuth2Credentials } from "~/app/credentials/OAuth2Credentials";
 
 const INTRA_OAUTH_URL = "https://api.intra.42.fr/oauth/authorize";
 

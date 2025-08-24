@@ -1,6 +1,5 @@
-import { fetchRefreshUserToken } from "~/api/oauth/token";
-import { UserTokenData } from "~/structures/FtTokenData";
-import { OAuth2Credentials } from "~/app/TokenManager/OAuth2Credentials";
+import { UserTokenData } from "~/api/oauth/token.schema";
+import { OAuth2Credentials } from "~/app/credentials/OAuth2Credentials";
 
 export class UserCredential {
 	private _tokenData: UserTokenData | null;
@@ -18,17 +17,14 @@ export class UserCredential {
 		return this._tokenData;
 	}
 
-	get token(): string { return this._data.access_token; }
-	get refreshToken(): string { return this._data.refresh_token; }
-	get type(): string { return this._data.token_type; }
-	get expiresIn(): number { return this._data.expires_in; }
-	get createdAt(): number { return this._data.created_at; }
+	get token(): string { return this._data.token; }
+	get type(): string { return this._data.type; }
 	get scope(): string { return this._data.scope; }
-	get secretValidUntil(): number { return this._data.secret_valid_until; }
-	get expiresAt(): number {
-		const data = this._data;
-		return data.created_at + data.expires_in;
-	}
+	get expiresIn(): number { return this._data.expiresIn; }
+	get createdAt(): number { return this._data.createdAt; }
+	get expiresAt(): number { return this._data.expiresAt; }
+	get refreshToken(): string { return this._data.refreshToken; }
+	get secretValidUntil(): number { return this._data.secretValidUntil; }
 
 	async requestNewToken() {
 		if (this._refreshPromise) return this._refreshPromise;
