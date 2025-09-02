@@ -1,5 +1,5 @@
 import { AppCredentials } from "./AppCredentials";
-import { OAuth2Credentials } from "~/app/credentials/OAuth2Credentials";
+import { OAuth2Credentials } from "~/generic/credentials/OAuth2Credentials";
 import { FtApp } from "../App";
 import { OAuth2CredentialsProps } from "~/structures/OAuth2CredentialsProps";
 

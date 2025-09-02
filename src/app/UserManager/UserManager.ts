@@ -1,11 +1,11 @@
 import { User } from "~/user/User";
 import { fetchUserToken } from "~/api/oauth/token";
 import { FtApp } from "../App";
-import { sendRawResponse, redirectResponse } from "../server/serverResponsesHandler";
+import { sendRawResponse, redirectResponse } from "~/server/serverResponsesHandler";
 import { IncomingMessage, ServerResponse } from "node:http";
 import { AuthenticatedRequest } from "~/structures/AuthenticatedRequest";
 import { UserTokenData } from "~/api/oauth/token.schema";
-import { OAuth2Credentials } from "~/app/credentials/OAuth2Credentials";
+import { OAuth2Credentials } from "~/generic/credentials/OAuth2Credentials";
 
 const INTRA_OAUTH_URL = "https://api.intra.42.fr/oauth/authorize";
 

@@ -1,5 +1,5 @@
 import { UserTokenData } from "~/api/oauth/token.schema";
-import { OAuth2Credentials } from "~/app/credentials/OAuth2Credentials";
+import { OAuth2Credentials } from "~/generic/credentials/OAuth2Credentials";
 
 export class UserCredential {
 	private _tokenData: UserTokenData | null;
