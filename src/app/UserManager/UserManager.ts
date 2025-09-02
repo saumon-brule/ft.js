@@ -26,9 +26,10 @@ export class UserManager {
 		let user = this.getUserById(newUser.id);
 		if (!user) {
 			user = newUser;
+			this.users.push(newUser);
+			this.ftApp.emit("userAdd", newUser);
 		}
-		this.users.push(newUser);
-		this.ftApp.emit("userAdd", newUser);
+		this.ftApp.emit("userRegister", newUser);
 		return newUser;
 	}
 
