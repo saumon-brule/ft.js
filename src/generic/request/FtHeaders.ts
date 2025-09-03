@@ -1,7 +1,7 @@
 export default class FtApiHeaders extends Headers {
 	constructor(token: string)
-	constructor(headerInit: HeadersInit, token: string)
-	constructor(ftApiHeadersInit: HeadersInit | string, token?: string) {
+	constructor(headerInit: HeadersInit | undefined, token: string)
+	constructor(ftApiHeadersInit: HeadersInit | undefined | string, token?: string) {
 		if (typeof ftApiHeadersInit === "string") {
 			super();
 			this.append("Authorization", `Bearer ${ftApiHeadersInit}`);
